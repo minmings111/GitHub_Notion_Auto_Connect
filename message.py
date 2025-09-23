@@ -13,8 +13,13 @@ from dotenv import load_dotenv
 
 # 🔑 1. API Key 불러오기
 load_dotenv()
-with open("./key/.openai_api_key") as f:
-    api_key = f.read().strip()
+# local
+# with open("./key/.openai_api_key") as f:
+#     api_key = f.read().strip()
+
+# Streamlit Secrets
+api_key = st.secrets["OPENAI_API_KEY"]
+
 client = OpenAI(api_key=api_key)
 
 # 📂 2. 코드 + 마크다운 불러오기 함수
