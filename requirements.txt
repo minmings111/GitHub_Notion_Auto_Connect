@@ -1,0 +1,10 @@
+streamlit
+nbformat
+nbconvert
+openai
+pyperclip
+markdown
+requests
+python-dotenv
+notion-client
+httpx
