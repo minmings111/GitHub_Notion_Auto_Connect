@@ -8,7 +8,7 @@ import notion_handler
 
 # %%
 # 페이지 제목 
-st.title("GitHub로 Notion 자동 작성")
+st.title("CODE Diary")
 
 st.write("새로 업로드된 GitHub 내용을 개인 Notion 페이지로 연결합니다.")
 st.write("아래에 필요한 정보를 입력해 주세요.")
