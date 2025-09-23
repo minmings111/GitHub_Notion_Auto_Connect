@@ -10,6 +10,7 @@ import textwrap
 import markdown
 import requests
 from dotenv import load_dotenv
+import streamlit as st
 
 # 🔑 1. API Key 불러오기
 load_dotenv()
