@@ -1,0 +1,20 @@
+# Python 가상 환경
+venv/
+
+# Python 캐시 파일
+__pycache__/
+*.pyc
+
+# OS 및 IDE 설정 파일
+.DS_Store
+.vscode/
+.idea/
+
+# 환경 변수 파일
+.env
+
+# API 키 폴더
+key/
+
+#
+/just_save_dont_use

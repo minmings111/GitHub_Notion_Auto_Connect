@@ -1,0 +1,141 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LangGraph 기초 학습 인포그래픽</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+        .icon {
+            font-size: 40px;
+        }
+        .title {
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .desc {
+            color: #666;
+            margin: 10px 0;
+        }
+        .keywords {
+            margin-top: 10px;
+        }
+        .tag {
+            display: inline-block;
+            background: #e0e0e0;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin: 5px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>LangGraph 기초 학습 인포그래픽</h1>
+
+<div class="grid">
+    <div class="card">
+        <div class="icon">📦</div>
+        <div class="title">상태 정의</div>
+        <div class="desc">LLM의 상태를 정의하여 각 단계에서 필요한 정보를 저장합니다.</div>
+        <div class="keywords">
+            <div class="tag">TypedDict</div>
+            <div class="tag">State</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="icon">🔗</div>
+        <div class="title">도구 정의 및 바인딩</div>
+        <div class="desc">외부 도구를 정의하고 LLM과 연결하여 기능을 확장합니다.</div>
+        <div class="keywords">
+            <div class="tag">TavilySearch</div>
+            <div class="tag">bind_tools</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="icon">🛠️</div>
+        <div class="title">노드 정의</div>
+        <div class="desc">각 기능을 수행하는 노드를 정의하여 그래프의 구성 요소로 추가합니다.</div>
+        <div class="keywords">
+            <div class="tag">Node</div>
+            <div class="tag">chatbot</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="icon">➡️</div>
+        <div class="title">엣지 추가</div>
+        <div class="desc">노드 간의 연결을 정의하여 흐름을 설정합니다.</div>
+        <div class="keywords">
+            <div class="tag">add_edge</div>
+            <div class="tag">conditional_edges</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="icon">📊</div>
+        <div class="title">그래프 컴파일</div>
+        <div class="desc">정의된 노드와 엣지를 기반으로 그래프를 컴파일합니다.</div>
+        <div class="keywords">
+            <div class="tag">compile</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="icon">🔄</div>
+        <div class="title">그래프 실행</div>
+        <div class="desc">사용자의 입력에 따라 그래프를 실행하여 결과를 생성합니다.</div>
+        <div class="keywords">
+            <div class="tag">stream</div>
+            <div class="tag">invoke</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="icon">💾</div>
+        <div class="title">메모리 추가</div>
+        <div class="desc">각 단계의 실행 결과를 저장하여 이전 상태를 기억합니다.</div>
+        <div class="keywords">
+            <div class="tag">MemorySaver</div>
+            <div class="tag">checkpointer</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="icon">🔍</div>
+        <div class="title">도구 호출</div>
+        <div class="desc">LLM의 요청에 따라 외부 도구를 호출하여 결과를 반영합니다.</div>
+        <div class="keywords">
+            <div class="tag">ToolNode</div>
+            <div class="tag">tools_condition</div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
