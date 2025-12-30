@@ -79,7 +79,14 @@ else:
         if st.button("확정 및 Notion 전송", type="primary"):
             with st.spinner("Notion 페이지에 요약 내용을 작성하는 중..."):
                 try:
-                    page_id = notion_page_url.split('/')[-1].split('?')[0]
+                    try:
+                        # URL에서 마지막 부분 추출 (쿼리 파라미터 제거)
+                        url_part = notion_page_url.split('?')[0].split('/')[-1]
+                        # 하이픈으로 구분된 마지막 부분이 페이지 ID
+                        page_id = url_part.split('-')[-1]
+                    except Exception as e:
+                        st.error(f"Notion URL 형식이 올바르지 않습니다: {e}")
+                        st.stop() 
                     notion_handler.send_to_notion(
                         notion_token=notion_token,
                         page_id=page_id,
