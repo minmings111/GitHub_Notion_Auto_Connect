@@ -51,10 +51,10 @@ if st.session_state.summary is None:
                     changes_text = "\n\n".join(f"📄 파일명: {c['filename']} ({c['status']})\n{c['patch']}" for c in commit_changes)
                     prompt = message.make_prompt(changes_text)
                     response = message.client.chat.completions.create(
-                        model="gpt-4o-mini",
+                        model="gpt-4o",
                         temperature=0,
                         messages=[
-                            {"role": "system", "content": "너는 학습 요약 도우미다."},
+                            {"role": "system", "content": "너는 개발자의 학습을 돕는 코드 분석 전문가다. 주어진 형식에 맞춰 명확하고 실용적인 학습 요약을 작성한다."},
                             {"role": "user", "content": prompt}
                         ]
                     )
