@@ -47,10 +47,10 @@ def md_to_notion_blocks(md: str):
         blocks.append({"object":"block","type":"paragraph", "paragraph":{"rich_text":[{"type":"text","text":{"content":line[:1900]}}]}})
     if code_mode: flush_code()
     return blocks
-    
+
 # --- Notion API를 안전하게 호출하는 함수 ---
 def safe_notion_call(fn, *args, **kwargs):
-    max_retries, delay = 5, 0.6
+    max_retries, delay = 8, 1.0
     for attempt in range(max_retries):
         try:
             return fn(*args, **kwargs)
