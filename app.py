@@ -78,28 +78,50 @@ else:
     with col1:
         if st.button("확정 및 Notion 전송", type="primary"):
             with st.spinner("Notion 페이지에 요약 내용을 작성하는 중..."):
-                try:
+                # Debug logs expander (collapsed by default)
+                with st.expander("Debug Logs", expanded=False):
                     try:
-                        # URL에서 마지막 부분 추출 (쿼리 파라미터 제거)
-                        url_part = notion_page_url.split('?')[0].split('/')[-1]
-                        # 하이픈으로 구분된 마지막 부분이 페이지 ID
-                        page_id = url_part.split('-')[-1]
+                        st.write("Starting Notion integration process...")
+                        
+                        try:
+                            st.write("Parsing Notion URL...")
+                            st.write(f"Input URL: {notion_page_url}")
+                            
+                            # URL에서 마지막 부분 추출 (쿼리 파라미터 제거)
+                            url_part = notion_page_url.split('?')[0].split('/')[-1]
+                            st.write(f"URL part extracted: {url_part}")
+                            
+                            # 하이픈으로 구분된 마지막 부분이 페이지 ID
+                            page_id = url_part.split('-')[-1]
+                            st.write(f"Page ID: {page_id}")
+                            st.write(f"Page ID length: {len(page_id)} (expected: 32)")
+                            
+                        except Exception as e:
+                            st.error(f"Failed to parse Notion URL: {e}")
+                            st.stop()
+                        
+                        st.write("Preparing API call...")
+                        st.write(f"Token length: {len(notion_token)} characters")
+                        st.write(f"Summary content length: {len(st.session_state.summary)} characters")
+                        
+                        notion_handler.send_to_notion(
+                            notion_token=notion_token,
+                            page_id=page_id,
+                            title=f"Commit 요약 ({commit_hash[:7]})",
+                            summary_content=st.session_state.summary # 세션 상태에서 요약 내용을 가져옴
+                        )
+                        
+                        st.write("Process completed successfully!")
+                        
                     except Exception as e:
-                        st.error(f"Notion URL 형식이 올바르지 않습니다: {e}")
-                        st.stop() 
-                    notion_handler.send_to_notion(
-                        notion_token=notion_token,
-                        page_id=page_id,
-                        title=f"Commit 요약 ({commit_hash[:7]})",
-                        summary_content=st.session_state.summary # 세션 상태에서 요약 내용을 가져옴
-                    )
-                    st.success("🎉 Notion 페이지 작성이 완료되었습니다!")
-                    st.balloons()
-                    # 💡 작업 완료 후, 세션 상태를 초기화하여 다시 처음 화면으로 돌아감
-                    del st.session_state.summary
-
-                except Exception as e:
-                    st.error(f"Notion 작성 중 오류 발생: {e}")
+                        st.error(f"Error occurred: {type(e).__name__}: {str(e)}")
+                        st.stop()
+                
+                # Success message (outside expander, visible to all users)
+                st.success("🎉 Notion 페이지 작성이 완료되었습니다!")
+                st.balloons()
+                # 💡 작업 완료 후, 세션 상태를 초기화하여 다시 처음 화면으로 돌아감
+                del st.session_state.summary
 
     with col2:
         if st.button("취소"):

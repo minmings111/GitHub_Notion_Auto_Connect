@@ -3,6 +3,7 @@
 import time
 from notion_client import Client
 import httpx
+import streamlit as st
 
 # --- Markdown을 Notion 블록으로 변환하는 함수 (원본 유지) ---
 def md_to_notion_blocks(md: str):
@@ -53,32 +54,67 @@ def safe_notion_call(fn, *args, **kwargs):
     max_retries, delay = 8, 1.0
     for attempt in range(max_retries):
         try:
-            return fn(*args, **kwargs)
+            st.write(f"API call attempt {attempt + 1}/{max_retries}")
+            result = fn(*args, **kwargs)
+            st.write("API call succeeded")
+            return result
         except httpx.HTTPStatusError as e:
+            st.write(f"HTTP error: {e.response.status_code}")
             if e.response.status_code in (409, 429, 503):
+                st.write(f"Retrying in {delay:.1f}s...")
                 time.sleep(delay); delay *= 1.7; continue
+            st.write("Non-retryable HTTP error")
             raise
-        except Exception:
+        except Exception as ex:
+            st.write(f"Exception: {type(ex).__name__}: {str(ex)}")
             time.sleep(delay); delay *= 1.7
-            if attempt == max_retries - 1: raise
+            if attempt == max_retries - 1:
+                st.write("Max retries exceeded")
+                raise
 
-# --- 🚀 Streamlit을 위한 메인 함수 ---
+# --- Streamlit function for sending content to Notion ---
 def send_to_notion(notion_token, page_id, title, summary_content):
     """
     LLM이 생성한 요약 내용을 Notion 페이지에 추가합니다.
     """
-    notion = Client(auth=notion_token)
+    st.write("Initializing Notion client...")
+    try:
+        notion = Client(auth=notion_token)
+        st.write("Notion client initialized successfully")
+    except Exception as e:
+        st.error(f"Failed to initialize Notion client: {type(e).__name__}: {str(e)}")
+        raise
     
+    st.write("Creating title block...")
     title_block = {"object": "block", "type": "heading_2", "heading_2": {"rich_text": [{"type": "text", "text": {"content": title}}]}}
-    summary_blocks = md_to_notion_blocks(summary_content)
-    divider_block = {"object": "block", "type": "divider", "divider": {}}
     
+    st.write("Converting markdown to Notion blocks...")
+    try:
+        summary_blocks = md_to_notion_blocks(summary_content)
+        st.write(f"Created {len(summary_blocks)} blocks from markdown")
+    except Exception as e:
+        st.error(f"Failed to convert markdown: {type(e).__name__}: {str(e)}")
+        raise
+    
+    divider_block = {"object": "block", "type": "divider", "divider": {}}
     all_blocks = [divider_block, title_block] + summary_blocks
+    st.write(f"Total blocks to send: {len(all_blocks)}")
     
     for i in range(0, len(all_blocks), 100):
-        safe_notion_call(
-            notion.blocks.children.append,
-            block_id=page_id,
-            children=all_blocks[i:i+100]
-        )
+        batch_size = min(100, len(all_blocks) - i)
+        st.write(f"Sending blocks {i+1} to {i+batch_size} of {len(all_blocks)}...")
+        
+        try:
+            safe_notion_call(
+                notion.blocks.children.append,
+                block_id=page_id,
+                children=all_blocks[i:i+100]
+            )
+            st.write(f"Successfully sent blocks {i+1} to {i+batch_size}")
+        except Exception as e:
+            st.error(f"Failed to send blocks: {type(e).__name__}: {str(e)}")
+            raise
+        
         time.sleep(0.3)
+    
+    st.write("All blocks sent successfully!")
