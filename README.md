@@ -116,6 +116,28 @@ streamlit run app.py
 5. Notion 페이지에서:
    - 우측 상단 `···` → `Add connections` → 생성한 Integration 연결
 
+#### ⚠️ Notion Integration 트러블슈팅
+
+**"Public API service is temporarily unavailable" 에러가 발생하면:**
+
+1. **Integration 권한 확인**
+   - [My Integrations](https://www.notion.so/my-integrations)에서 생성한 Integration 클릭
+   - **Capabilities** 섹션에서 다음 권한 활성화:
+     - ✅ Read content
+     - ✅ Update content
+     - ✅ Insert content
+
+2. **페이지에 Integration 연결 (가장 중요!)**
+   - Notion에서 작성할 페이지 열기
+   - 우측 상단 `···` → `연결 추가` (Add connections)
+   - 생성한 Integration 선택하여 연결
+   - ⚠️ **이 단계를 빠뜨리면 API 호출이 실패합니다!**
+
+3. **Token 재확인**
+   - Integration 설정에서 "Show"를 눌러 Token 확인
+   - 앱에 입력한 Token과 정확히 일치하는지 확인
+   - 앞뒤 공백이 없는지 확인
+
 ### OpenAI API Key
 
 1. [OpenAI Platform](https://platform.openai.com/api-keys) 접속
